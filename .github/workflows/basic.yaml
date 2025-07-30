@@ -1,20 +1,22 @@
 name: Remote SSH Command
-on: 
- push:
-  branches:
-    - master
 
+on:
+  push:
+    branches:
+      - master
 
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Execute remote SSH commands using password
+      - name: Execute remote SSH commands using private key
         uses: appleboy/ssh-action@v1
         with:
-          host: ${{ secrets.HOST }}
-          username: linuxserver.io
-          password: ${{ secrets.PASSWORD }}
-          port: ${{ secrets.PORT }}
-          script: whoami
+          host: ${{ secrets.HOST }}                    # e.g., 13.201.XX.XX
+          username: ubuntu                           # or 'ubuntu' if using Ubuntu AMI
+          key: ${{ secrets.SSH_PRIVATE_KEY }}          # paste .pem file content as a GitHub secret
+          port: 22
+          script: |
+            whoami
+            uptime
